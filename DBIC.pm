@@ -5,7 +5,7 @@ use warnings;
 
 use base 'Catalyst::Plugin::I18N';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub load_lexicon {
     my ($c, @paths) = @_;
