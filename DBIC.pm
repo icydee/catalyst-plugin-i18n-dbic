@@ -5,7 +5,7 @@ use warnings;
 
 use base 'Catalyst::Plugin::I18N';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub load_lexicon {
     my ($c, @paths) = @_;
@@ -102,6 +102,29 @@ It is more efficient in database requests to request all paths that may be
 used on a page in one go. It may however be more convenient to make several
 requests if you include templates in other templates (such as header and
 footer templates) and make separate calls in each template.
+
+=head1 Database Schema
+
+The module requires a table called C<lexicon> with the following structure
+
+  CREATE TABLE lexicon (
+    id          int(11) NOT NULL auto_increment,
+    language    varchar(15)     default NULL,
+    path        varchar(255)    default NULL,
+    message     text,
+    value       text,
+    notes       text,
+    PRIMARY KEY (id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+Actually you may want to change the index method and the 'notes' field is not
+required but can be useful to hold information to help the translator put the
+message in context.
+
+The C<value> is the tranlated C<message>. The C<path> is the context where
+the message is used. For example you may wish to group all the menu button
+text and navigation text into the C<navigation> path. All the text for the
+generic header template could be in the C<header> path etc.
 
 =head1 SEE ALSO
 
