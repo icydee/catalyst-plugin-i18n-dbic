@@ -34,3 +34,87 @@ EOF
 }
 
 1;
+
+=pod
+
+=head1 NAME
+
+Catalyst::Plugin::I18N::DBIC - Internationalization for Catalyst, data loaded
+from database
+
+=head1 SYNOPSIS
+
+  use Catalyst qw(-Debug I18N::DBIC);
+
+  $c->languages( ['de'] );
+  $c->load_lexicon( qw(footer header user/list navigation) );
+  print $c->localize('Hello Catalyst');
+
+Or in your template
+
+  [% c.load_lexicon('header', 'navigation') %]
+
+  [% c.loc('Home Page') %]
+  [% c.loc('Welcome to Catalyst') %]
+
+
+=head1 DESCRIPTION
+
+This module is based on L<Catalyst::Plugin::I18N> and L<I18N> and you should
+refer to those modules for further information.
+
+These modules hold their localization data in files (mo, po or pm files) and
+for a very large application these files can become very large and difficult
+to maintain.
+
+L<Catalyst::Plugin::I18N::DBIC> however allows you to hold the localization
+data in a database (using L<Catalyst::Model::DBIC::Schema> ) which has
+several advantages.
+
+=over 4
+
+=item
+
+The localization data can be split into several 'paths' which represent the
+natural organization of the applicatio. e.g. 'footer', 'header', 'navigation',
+'user/list'.
+
+=item
+
+You can write an application that directly modifies the database so that
+your translators can do their stuff more easily and directly.
+
+=item
+
+If you have a client that requires custom text it is easier to do this by
+making a database change than by releasing a new text file.
+
+=back
+
+=head1 EXTENDED METHODS
+
+=head2 load_lexicon
+
+Takes an array of 'paths' which should be searched to load the Lexicon data
+from the database.
+
+It is more efficient in database requests to request all paths that may be
+used on a page in one go. It may however be more convenient to make several
+requests if you include templates in other templates (such as header and
+footer templates) and make separate calls in each template.
+
+=head1 SEE ALSO
+
+Refer to L<Catalyst::Plugin::I18N> for information on the other methods used.
+
+=head1 AUTHOR
+
+Ian Docherty, C<cpan@iandocherty.com>
+
+=head1 COPYRIGHT & LICENSE
+
+	Copyright (c) 2005 the aforementioned authors. All rights
+	reserved. This program is free software; you can redistribute
+	it and/or modify it under the same terms as Perl itself.
+
+=cut
