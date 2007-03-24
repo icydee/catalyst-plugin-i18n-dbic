@@ -11,7 +11,6 @@ sub load_lexicon {
     my ($c, @paths) = @_;
 
     my $class = ref $c || $c;
-    my $obj = "$class\::I18N"->get_handle(@{$c->languages});
     my $lang = $c->language;
 
     my $where = {
@@ -19,8 +18,9 @@ sub load_lexicon {
         path        => [@paths],
     };
 
-    my $lexicons_rc = $c->model('DBIC::Lexicon')->search($where);
-    while (my $lex = $lexicons_rc->next) {
+    my $lexicon_model = $c->config->{'I18N::DBIC'}{lexicon} || 'DBIC::Lexicon';
+    my $lexicons_rs = $c->model($lexicon_model)->search($where);
+    while (my $lex = $lexicons_rs->next) {
         my $message = $lex->message;
         my $value = $lex->value;
 
