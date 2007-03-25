@@ -126,6 +126,10 @@ The module requires a table called C<lexicon> with the following structure
     PRIMARY KEY (id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+By default the table C<lexicon> is used if you don't specify the
+lexicon_model in the config. If you use an alternative table you must still
+use the same structure.
+
 Actually you may want to change the index method and the 'notes' field is not
 required but can be useful to hold information to help the translator put the
 message in context.
