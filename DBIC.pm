@@ -5,7 +5,7 @@ use warnings;
 
 use base 'Catalyst::Plugin::I18N';
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub load_lexicon {
     my ($c, @paths) = @_;
@@ -20,6 +20,7 @@ sub load_lexicon {
 
     my $lexicon_model = $c->config->{'I18N::DBIC'}{lexicon} || 'DBIC::Lexicon';
     my $lexicons_rs = $c->model($lexicon_model)->search($where);
+
     while (my $lex = $lexicons_rs->next) {
         my $message = $lex->message;
         my $value = $lex->value;
@@ -46,6 +47,15 @@ from database
 
   use Catalyst qw(-Debug I18N::DBIC);
 
+  __PACKAGE__->config(
+      name => 'MyApp',
+      'I18N::DBIC'    => {
+          lexicon_model   => 'DBIC::MyLexicon',
+      },
+  );
+
+You can load the lexicon in your controller.
+
   $c->languages( ['de'] );
   $c->load_lexicon( qw(footer header user/list navigation) );
   print $c->localize('Hello Catalyst');
@@ -56,7 +66,6 @@ Or in your template
 
   [% c.loc('Home Page') %]
   [% c.loc('Welcome to Catalyst') %]
-
 
 =head1 DESCRIPTION
 
@@ -76,7 +85,7 @@ several advantages.
 =item
 
 The localization data can be split into several 'paths' which represent the
-natural organization of the applicatio. e.g. 'footer', 'header', 'navigation',
+natural organization of the application. e.g. 'footer', 'header', 'navigation',
 'user/list'.
 
 =item
@@ -130,9 +139,20 @@ generic header template could be in the C<header> path etc.
 
 Refer to L<Catalyst::Plugin::I18N> for information on the other methods used.
 
+=head1 TO-DO
+
+=over 4
+
+=item Implement caching methods on-demand or pre-load
+=item Reduce name clashes for text by making use of the path data
+
+=back
+
 =head1 AUTHOR
 
 Ian Docherty, C<cpan@iandocherty.com>
+
+With thanks to Kazuma Shiraiwa, Brian Cassidy and others for feedback and advice.
 
 =head1 COPYRIGHT & LICENSE
 
